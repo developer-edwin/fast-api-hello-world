@@ -28,4 +28,4 @@ def home():
 
 @app.post("/person/new")
 def create_person(person: Person = Body(...)):
-    return Person
+    return person
