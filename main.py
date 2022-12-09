@@ -11,12 +11,11 @@ from pydantic import HttpUrl
 # FastAPI
 from fastapi import FastAPI
 from fastapi import status
+from fastapi import HTTPException
 from fastapi import Body, Query, Path
 from fastapi import Form
 from fastapi import Header, Cookie
 from fastapi import File, UploadFile
-from starlette.status import HTTP_200_OK
-from starlette.types import Message
 
 app = FastAPI()
 
@@ -156,6 +155,7 @@ def show_person(
 
 # Validations: Path Parameters
 
+persons = [1, 2, 3, 4, 5]
 
 @app.get(
     path="/person/detail{person_id}",
@@ -167,9 +167,14 @@ def show_person(
         gt=0,
         title="Person ID",
         description="This is the person ID and it's required",
-        example=123
+        example=5
         )
 ):
+    if person_id not in persons:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="This person doesn't exists!"
+        )
     return {person_id: "It exists!"}
 
 # Validations: Request Body
@@ -250,6 +255,7 @@ def contact(
     ads: Optional[str] = Cookie(default=None)
 ):
     return user_agent
+
 
 @app.post(
     path="/post-image"
