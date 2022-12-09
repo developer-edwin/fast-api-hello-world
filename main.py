@@ -70,7 +70,7 @@ class Person(BaseModel):
     personal_site: Optional[HttpUrl] = Field(default=None)
     
     
-    ## We couls do this or we can enter an extra field in each parameter as "example" as we can see in Location class
+    ## We could do this or we can enter an extra field in each parameter as "example" as we can see in Location class
     class Config:
         schema_extra = {
             "example": { ## This key shold be always named "example"
