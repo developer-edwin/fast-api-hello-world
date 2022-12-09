@@ -97,6 +97,7 @@ def create_person(person: Person = Body(...)):
     return person
 
 # Validations: Query parameters
+## Query and path parameters can set authomatic examples with key example in pydantic Field
 
 
 @app.get("/person/detail")
