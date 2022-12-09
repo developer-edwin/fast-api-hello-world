@@ -68,9 +68,13 @@ class Person(BaseModel):
         ...
     )
     personal_site: Optional[HttpUrl] = Field(default=None)
-    
+    password: str = Field(
+        ...,
+        min_length=8
+    )
     
     ## We could do this or we can enter an extra field in each parameter as "example" as we can see in Location class
+
     class Config:
         schema_extra = {
             "example": { ## This key shold be always named "example"
@@ -80,9 +84,34 @@ class Person(BaseModel):
                 "hair_color": HairColor.brown,
                 "is_married": True,
                 "email": "azkur.zone@gmail.com",
-                "personal_site": "https://www.azkur.com"
+                "personal_site": "https://www.azkur.com",
+                "password": "123454678"
             }
         }
+
+
+class PersonOut(BaseModel):
+    first_name: str = Field(
+        ...,
+        min_length=1,
+        max_length=50
+    )
+    last_name: str = Field(
+        ...,
+        min_length=1,
+        max_length=50
+    )
+    age: int = Field(
+        ...,
+        gt=18,
+        le=115
+    )
+    hair_color: Optional[HairColor] = Field(default=None)
+    is_married: Optional[bool] = Field(default=None)
+    email: EmailStr = Field(
+        ...
+    )
+    personal_site: Optional[HttpUrl] = Field(default=None)
 
 
 @app.get("/")
@@ -92,7 +121,7 @@ def home():
 # Request and Response Body
 
 
-@app.post("/person/new")
+@app.post("/person/new", response_model=PersonOut) # This is the response_model
 def create_person(person: Person = Body(...)):
     return person
 
