@@ -70,7 +70,7 @@ class Person(BaseModel):
     personal_site: Optional[HttpUrl] = Field(default=None)
     
     
-    ## We couls do this or we can enter an extra field in each parameter as "example" as we can see in Location class
+    ## We could do this or we can enter an extra field in each parameter as "example" as we can see in Location class
     class Config:
         schema_extra = {
             "example": { ## This key shold be always named "example"
@@ -97,6 +97,7 @@ def create_person(person: Person = Body(...)):
     return person
 
 # Validations: Query parameters
+## Query and path parameters can set authomatic examples with key example in pydantic Field
 
 
 @app.get("/person/detail")
@@ -106,12 +107,14 @@ def show_person(
         min_length=1,
         max_length=50,
         title="Person Name",
-        description="This is the person name. It's between 1 and 50 characters long"
+        description="This is the person name. It's between 1 and 50 characters long",
+        example="John"
         ),
     age: int = Query(
         ...,
         title="Person Age",
-        description="This is the person age. It's required"
+        description="This is the person age. It's required",
+        example="30"
         )
 ):
     return {name: age}
@@ -125,7 +128,8 @@ def show_person(
         ...,
         gt=0,
         title="Person ID",
-        description="This is the person ID and it's required"
+        description="This is the person ID and it's required",
+        example=123
         )
 ):
     return {person_id: "It exists!"}
@@ -139,7 +143,8 @@ def update_person(
             ...,
         title="Person ID",
         description="This is the person ID",
-        gt=0
+        gt=0,
+        example=321
     ),
     person: Person = Body(...),
     location: Location = Body(...)
@@ -154,7 +159,8 @@ def updat_location(
         ...,
         titel="Person ID",
         description="This is the person ID",
-        gt=0
+        gt=0,
+        example=333
     ),
     location: Location = Body(...)
 ):
