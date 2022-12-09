@@ -11,7 +11,7 @@ from pydantic import HttpUrl
 # FastAPI
 from fastapi import FastAPI
 from fastapi import status
-from fastapi import Body, Query, Path
+from fastapi import Body, Query, Path, Form
 
 app = FastAPI()
 
@@ -93,9 +93,18 @@ class Person(PersonBase):
         min_length=8
     )
 
+
 class PersonOut(PersonBase):
     pass
 
+
+class LoginOut(BaseModel):
+    username: str = Field(
+        ...,
+        max_length=20,
+        example="username2022"
+    )
+    message: str = Field(default="Login Succesfully!")
 
 @app.get(
     path="/",
@@ -195,3 +204,16 @@ def updat_location(
     location: Location = Body(...)
 ):
     return location
+
+@app.post(
+    path="/login",
+    response_model=LoginOut,
+    status_code=status.HTTP_200_OK
+)
+def login(
+    username: str = Form(...),
+    password: str = Form(...)
+    ):
+    return LoginOut(
+        username=username
+        ) # We need to  instance the LoginOut CLASS method to return the response
