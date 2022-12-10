@@ -112,7 +112,8 @@ class LoginOut(BaseModel):
 
 @app.get(
     path="/",
-    status_code=status.HTTP_200_OK
+    status_code=status.HTTP_200_OK,
+    tags=["Home"]
     )
 def home():
     return {"Hello": "world"}
@@ -123,7 +124,9 @@ def home():
 @app.post(
     path="/person/new",
     status_code=status.HTTP_201_CREATED,
-    response_model=PersonOut) # This is the response_model
+    response_model=PersonOut,
+    tags=["Person"]
+    ) # This is the response_model
 def create_person(person: Person = Body(...)):
     return person
 
@@ -133,7 +136,8 @@ def create_person(person: Person = Body(...)):
 
 @app.get(
     path="/person/detail",
-    status_code=status.HTTP_200_OK
+    status_code=status.HTTP_200_OK,
+    tags=["Person"]
     )
 def show_person(
     name: Optional[str] = Query(
@@ -159,7 +163,8 @@ persons = [1, 2, 3, 4, 5]
 
 @app.get(
     path="/person/detail{person_id}",
-    status_code=status.HTTP_200_OK
+    status_code=status.HTTP_200_OK,
+    tags=["Person"]
     )
 def show_person(
     person_id: int = Path(
@@ -182,7 +187,8 @@ def show_person(
 
 @app.put(
     path="/person/{person_id}",
-    status_code=status.HTTP_200_OK
+    status_code=status.HTTP_200_OK,
+    tags=["Person"]
     )
 def update_person(
     person_id: int = Path(
@@ -201,7 +207,8 @@ def update_person(
 
 @app.put(
     path="/person/location/{person_id}",
-    status_code=status.HTTP_200_OK
+    status_code=status.HTTP_200_OK,
+    tags=["Person"]
     )
 def updat_location(
     person_id: int = Path(
@@ -218,7 +225,8 @@ def updat_location(
 @app.post(
     path="/login",
     response_model=LoginOut,
-    status_code=status.HTTP_200_OK
+    status_code=status.HTTP_200_OK,
+    tags=["Person"]
 )
 def login(
     username: str = Form(...),
@@ -234,6 +242,7 @@ def login(
 @app.post(
     path="/contact",
     status_code=status.HTTP_200_OK,
+    tags=["Form"]
 )
 def contact(
     first_name: str = Form(
@@ -258,7 +267,8 @@ def contact(
 
 
 @app.post(
-    path="/post-image"
+    path="/post-image",
+    tags=["Upload"]
 )
 def post_image(
     image: UploadFile = File(...)
