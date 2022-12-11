@@ -164,7 +164,9 @@ def create_person(person: Person = Body(...)):
 @app.get(
     path="/person/detail",
     status_code=status.HTTP_200_OK,
-    tags=["Person"]
+    tags=["Person"],
+    summary="Get Person detail",
+    deprecated=True
     )
 def show_person(
     name: Optional[str] = Query(
@@ -205,7 +207,8 @@ persons = [1, 2, 3, 4, 5]
 @app.get(
     path="/person/detail{person_id}",
     status_code=status.HTTP_200_OK,
-    tags=["Person"]
+    tags=["Person"],
+    summary="Get person detail"
     )
 def show_person(
     person_id: int = Path(
@@ -246,7 +249,8 @@ def show_person(
 @app.put(
     path="/person/{person_id}",
     status_code=status.HTTP_200_OK,
-    tags=["Person"]
+    tags=["Person"],
+    summary="Update person data"
     )
 def update_person(
     person_id: int = Path(
@@ -291,7 +295,8 @@ def update_person(
 @app.put(
     path="/person/location/{person_id}",
     status_code=status.HTTP_200_OK,
-    tags=["Person"]
+    tags=["Person"],
+    summary="Update persn location data"
     )
 def updat_location(
     person_id: int = Path(
@@ -299,7 +304,8 @@ def updat_location(
         titel="Person ID",
         description="This is the person ID",
         gt=0,
-        example=333
+        example=333,
+        deprecated=True
     ),
     location: Location = Body(...)
 ):
@@ -326,7 +332,8 @@ def updat_location(
     path="/login",
     response_model=LoginOut,
     status_code=status.HTTP_200_OK,
-    tags=["Person"]
+    tags=["Person"],
+    summary="Login area"
 )
 def login(
     username: str = Form(...),
@@ -355,7 +362,8 @@ def login(
 @app.post(
     path="/contact",
     status_code=status.HTTP_200_OK,
-    tags=["Form"]
+    tags=["Form"],
+    summary="Contact area"
 )
 def contact(
     first_name: str = Form(
@@ -399,7 +407,8 @@ def contact(
 
 @app.post(
     path="/post-image",
-    tags=["Upload"]
+    tags=["Upload"],
+    summary="Image upload"
 )
 def post_image(
     image: UploadFile = File(...)
