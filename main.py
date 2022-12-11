@@ -116,6 +116,12 @@ class LoginOut(BaseModel):
     tags=["Home"]
     )
 def home():
+    """
+    # home
+
+    ## Returns:
+        Body(): Return a response body with a greeting message.
+    """
     return {"Hello": "world"}
 
 # Request and Response Body
@@ -125,9 +131,30 @@ def home():
     path="/person/new",
     status_code=status.HTTP_201_CREATED,
     response_model=PersonOut,
-    tags=["Person"]
+    tags=["Person"],
+    summary="Create person in the app"
     ) # This is the response_model
 def create_person(person: Person = Body(...)):
+    """
+    # create_person
+    
+    This path operation function creates a person in the app and save the information in the database.
+
+    ## Args:
+    
+        -person (Person): Person model.
+            - first_name (str): User first name.
+            - last_name (str): User last name.
+            - age (int): User age.
+            - hair_color (HairColor, optional): User hair color. Defaults to None.
+            - is_married (bool, optional): User married status. Defaults to None.
+            - email (EmailStr): User email.
+
+
+    ## Returns:
+    
+        Body(): Person model.
+    """
     return person
 
 # Validations: Query parameters
@@ -155,6 +182,20 @@ def show_person(
         example="30"
         )
 ):
+    """
+    # show_person
+    
+    This endpoint recives query parameters and returns a respose body with the person id seted.
+
+    ## Args:
+    
+        - name (Optional[str], optional): Person name.
+        - age (int): Person age. 
+
+    ## Returns:
+    
+        Body: Return a response body with user name as key and age as value.
+    """
     return {name: age}
 
 # Validations: Path Parameters
@@ -175,6 +216,23 @@ def show_person(
         example=5
         )
 ):
+    """
+    # show_person
+    
+    
+
+    ## Args:
+    
+        - person_id (int): Person ID.
+
+    ## Raises:
+    
+        HTTPException: If the ID doesn't exists, return a persolalized error exception message.
+
+    ##Returns:
+    
+        Body(): Return a response body with a value informs that ID exists.
+    """
     if person_id not in persons:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -201,6 +259,31 @@ def update_person(
     person: Person = Body(...),
     location: Location = Body(...)
 ):
+    """
+    # update_person
+    
+    This path operation updates information from person model and location model.
+
+    ## Args:
+    
+        - person_id (int): Person ID.
+        - person (Person): Person model.
+            - first_name (str): User first name.
+            - last_name (str): User last name.
+            - age (int): User age.
+            - hair_color (HairColor, optional): User hair color. Defaults to None.
+            - is_married (bool, optional): User married status. Defaults to None.
+            - email (EmailStr): User email.
+        - location (Location): Location model.
+            - city (str): Person City.
+            - state (str): Person State.
+            - country (str): Person Country.
+
+    ## Returns:
+    
+        Body(): Person model.
+        Body(): Location model.
+    """
     results = person.dict()
     results.update(location.dict())
     return results
@@ -220,6 +303,23 @@ def updat_location(
     ),
     location: Location = Body(...)
 ):
+    """
+    # updat_location
+    
+    This path operation recives a Person ID and updates de location model.
+
+    ## Args:
+
+        - person_id (int): Person ID.
+        - location (Location): Location model.
+            - city (str): Person City.
+            - state (str): Person State.
+            - country (str): Person Country.
+
+    ## Returns:
+    
+        Body(): Location model.
+    """
     return location
 
 @app.post(
@@ -232,6 +332,19 @@ def login(
     username: str = Form(...),
     password: str = Form(...)
     ):
+    """
+    # login
+    
+    This form allows to login using username and password.
+
+    ## Args:
+        username (str): Person username.
+        password (str): Person password.
+
+    ## Returns:
+    
+        Body(): Return a response body with de username and a message of succesfuly login.
+    """
     return LoginOut(
         username=username
         ) # We need to instance the LoginOut CLASS method to return the response
@@ -263,6 +376,24 @@ def contact(
     user_agent: Optional[str] = Header(default=None),
     ads: Optional[str] = Cookie(default=None)
 ):
+    """
+    # contact
+    
+    
+
+    ## Args:
+    
+        - first_name (str): Person name.
+        - last_name (str): Person last name.
+        - email (EmailStr): Person email.
+        - message (str): Message to be send.
+        - user_agent (Optional[str], optional): Web browser data. Defaults to Header(default=None).
+        - ads (Optional[str], optional): Web browser cookies. Defaults to Cookie(default=None).
+
+    ## Returns:
+    
+        Body(): Returns the Web browser data.
+    """
     return user_agent
 
 
@@ -273,6 +404,19 @@ def contact(
 def post_image(
     image: UploadFile = File(...)
 ):
+    """
+    # post_image
+    
+    This form recives an image file and return its technical data.
+
+    ## Args:
+    
+        image (UploadFile): Image file.
+
+    ## Returns:
+    
+        Body(): Return a ressponse body with the technical data about the image.
+    """
     return {
         "Filename": image.filename,
         "Format": image.content_type,
